@@ -8,23 +8,26 @@ benchmark. They are tracked in this repository and are the default at runtime.
 Set `MAKEUPGRPO_TEXT_COND_DIR` to override their location; the directory must
 contain all three files.
 
-## Hugging Face downloads
+## Exact runtime assets on Hugging Face
 
-The repository deliberately does not ship the large Hugging Face model
-snapshots cached on the original evaluation server. The evaluator downloads the
-public model IDs on first use and then reuses the local Hugging Face cache:
+`emiliiia/makeupGRPOeval-benchmarks/runtime_assets/` is a copy of the local
+checkpoint files used by this project. Restore it with:
+
+```bash
+python scripts/download_runtime_assets.py --output-dir assets/runtime
+```
 
 | Consumer | Model ID / asset | Asset policy |
 | --- | --- | --- |
-| UNO inference (T5) | `xlabs-ai/xflux_text_encoders` | automatic download |
-| UNO inference (CLIP text encoder) | `openai/clip-vit-large-patch14` | automatic download |
-| CLIP-I | `openai/clip-vit-large-patch14` | automatic download |
-| DINO-I | `facebook/dino-vitb16` | automatic download |
-| Face similarity | VGGFace2 InceptionResnetV1 | `facenet-pytorch` automatic download |
-| Background L2 | BiSeNet `79999_iter.pth` | tracked in this repository (53 MB) |
+| UNO inference (T5) | `runtime_assets/uno/t5/` | `export T5=.../runtime_assets/uno/t5` |
+| UNO inference (CLIP text encoder) | `runtime_assets/clip-vit-large-patch14/` | `export CLIP=.../clip-vit-large-patch14` |
+| CLIP-I | `runtime_assets/clip-vit-large-patch14/` | `export MAKEUPGRPO_CLIP_MODEL=.../clip-vit-large-patch14` |
+| DINO-I | `runtime_assets/dino-vitb16/` | `export MAKEUPGRPO_DINO_MODEL=.../dino-vitb16` |
+| Face similarity | `runtime_assets/face_sim/20180402-114759-vggface2.pt` | `export vggface2_path=...` |
+| Background L2 | `runtime_assets/bg_sim/79999_iter.pth` | already in GitHub code package |
+| FLUX base | `runtime_assets/uno/flux-dev/` | pass as `--flux-dir` |
+| Current RL checkpoint | `runtime_assets/uno/rl/.../checkpoint-320-0/` | pass as `--checkpoint-path` |
 
-For air-gapped machines, pre-populate the Hugging Face cache on a connected
-machine and copy it to the destination server. Set `HF_HOME` to that copied
-cache (or use its default location, `~/.cache/huggingface`) before running.
-Do not use model files from a different revision when comparing numbers with
-prior experiments.
+For air-gapped machines, run the download script on a connected machine and
+copy `assets/runtime/` to the target server. These paths use local files and do
+not require a Hugging Face cache at runtime.

@@ -31,6 +31,15 @@ pip install -r requirements-eval.txt
 python scripts/download_benchmarks.py \
   --repo-id emiliiia/makeupGRPOeval-benchmarks \
   --output-dir data
+
+# Download the exact local runtime checkpoints that were used on the source
+# server. This does not fetch any model from an official upstream repository.
+python scripts/download_runtime_assets.py --output-dir assets/runtime
+export MAKEUPGRPO_CLIP_MODEL="$PWD/assets/runtime/runtime_assets/clip-vit-large-patch14"
+export MAKEUPGRPO_DINO_MODEL="$PWD/assets/runtime/runtime_assets/dino-vitb16"
+export vggface2_path="$PWD/assets/runtime/runtime_assets/face_sim/20180402-114759-vggface2.pt"
+export CLIP="$PWD/assets/runtime/runtime_assets/clip-vit-large-patch14"
+export T5="$PWD/assets/runtime/runtime_assets/uno/t5"
 ```
 
 The repository already includes `assets/text_cond_tensor/{txt.pt,txt_ids.pt,vec.pt}`.
@@ -38,15 +47,10 @@ They are required by UNO-RL inference and are loaded automatically. To use an
 external copy instead, set `MAKEUPGRPO_TEXT_COND_DIR` to the directory that
 contains those same three files.
 
-UNO inference also loads its text encoders from Hugging Face on first use:
-`xlabs-ai/xflux_text_encoders` (T5) and `openai/clip-vit-large-patch14` (CLIP).
-The metric evaluator additionally downloads the models listed in
-[`assets/MODELS.md`](assets/MODELS.md). For an air-gapped server, first run one
-connected evaluation with the same environment and copy its Hugging Face cache
-(normally `~/.cache/huggingface`, or the directory configured by `HF_HOME`) to
-the destination; set `HF_HOME` there before running inference or metrics. The
-FLUX base weights and the RL checkpoint remain explicit paths in the run command
-below and must be made available separately.
+The command above restores the exact CLIP, DINO, VGGFace2, BiSeNet, UNO T5,
+empty-prompt tensor, FLUX base, and current RL checkpoint copies from this
+project's HF dataset. No upstream model download is required after that. The
+FLUX base weights and RL checkpoint paths to use are shown below.
 
 The canonical benchmark download page is:
 
@@ -67,8 +71,8 @@ CUDA_VISIBLE_DEVICES=0 python infer_benchmark_rl.py \
   --data-dir data \
   --output-root outputs \
   --run-name results_lr2e-6/checkpoint-320-guidance8 \
-  --checkpoint-path /path/to/checkpoint-320-0/diffusion_pytorch_model.safetensors \
-  --flux-dir /path/to/flux-dev \
+  --checkpoint-path assets/runtime/runtime_assets/uno/rl/part_latest_SFT_data_v3_cf_reward+cf+2e-6+GAS6/checkpoint-320-0/diffusion_pytorch_model.safetensors \
+  --flux-dir assets/runtime/runtime_assets/uno/flux-dev \
   --guidance 8
 
 CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. python calculate_paired_metrics.py \
@@ -113,7 +117,6 @@ never place a token in this repository.
 
 ## Metric assets
 
-See [assets/MODELS.md](assets/MODELS.md). The evaluator uses public Hugging
-Face IDs rather than absolute paths from the old server, so the destination
-machine can populate its own cache. For strict comparisons, preserve the
-downloaded model revisions/cache used by the experiment.
+See [assets/MODELS.md](assets/MODELS.md) for the exact local asset layout.
+All checkpoints used by the released evaluation are mirrored from this server
+under the HF dataset's `runtime_assets/` directory.
