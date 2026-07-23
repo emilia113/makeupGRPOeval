@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+data/
+outputs/
+assets_release/
+checkpoints/
+metric_results/
+*.safetensors
+*.pt
+*.pth
+*.bin
+!assets/text_cond_tensor/
+!assets/text_cond_tensor/*.pt
+!metrics/paired_metric/bg_sim/face-parsing.PyTorch/res/cp/79999_iter.pth
+!metrics/paired_metric/bg_sim/face-parsing.PyTorch/res/

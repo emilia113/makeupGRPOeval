@@ -1,0 +1,1 @@
+"""CLIP image-similarity metric."""

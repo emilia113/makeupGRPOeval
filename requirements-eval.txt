@@ -1,0 +1,13 @@
+# The destination server already has the UNO environment. Install only if its
+# evaluation dependencies are missing.
+accelerate==1.1.1
+transformers==4.43.3
+huggingface-hub
+safetensors
+einops==0.8.0
+tqdm
+pillow
+pyyaml
+numpy
+opencv-python
+facenet-pytorch
