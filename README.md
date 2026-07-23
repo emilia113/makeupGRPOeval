@@ -21,7 +21,7 @@ The target server needs the existing UNO Python environment and a GPU. From a
 fresh clone:
 
 ```bash
-git clone https://github.com/<GITHUB_USERNAME>/makeupGRPOeval.git
+git clone https://github.com/emilia113/makeupGRPOeval.git
 cd makeupGRPOeval
 # Activate the pre-existing UNO environment first. On this setup, ensure its
 # CUDA libraries take precedence over inherited system libraries.
@@ -52,7 +52,6 @@ The canonical benchmark download page is:
 
 `https://huggingface.co/datasets/emiliiia/makeupGRPOeval-benchmarks`
 
-Replace the GitHub placeholder above after the code repository is published.
 The archive is a fresh,
 single snapshot of `BeautyBench`, `MT`, `MT_wild`, and `LADN`, including their
 pair JSONs and all images; its `.sha256` file must match before extracting.
