@@ -1,0 +1,4 @@
+interface:
+  display_name: "UNO Latest Checkpoint Infer"
+  short_description: "Download latest UNO checkpoint and run GPU 3 inference"
+  default_prompt: "Use $uno-latest-checkpoint-infer to download the latest checkpoint and run BeautyBench on GPU 3."
